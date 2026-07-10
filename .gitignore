@@ -1,0 +1,26 @@
+node_modules/
+dist/
+build/
+coverage/
+.env
+.env.*
+!.env.example
+*.log
+npm-debug.log*
+.DS_Store
+backend/uploads/*
+!backend/uploads/.gitkeep
+.vite/
+.turbo/
+
+# Expo / React Native generated + native projects
+mobile/.expo/
+mobile/android/
+mobile/ios/
+mobile/web-build/
+*.orig.*
+
+# OS / editor
+Thumbs.db
+.idea/
+.vscode/

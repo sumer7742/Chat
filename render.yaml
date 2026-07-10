@@ -1,0 +1,66 @@
+# Render Blueprint — deploys the backend API as a free Node web service.
+# In the Render dashboard: New + → Blueprint → connect this repo → apply.
+# Then set MONGO_URI (from MongoDB Atlas) in the service's Environment tab.
+services:
+  - type: web
+    name: pulse-chat-api
+    runtime: node
+    rootDir: backend
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: node dist/server.js
+    healthCheckPath: /api/v1/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: API_HOST
+        value: 0.0.0.0
+      # Auto-generated strong secrets (48+ chars).
+      - key: JWT_ACCESS_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_TTL
+        value: 15m
+      - key: JWT_REFRESH_TTL
+        value: 30d
+      # ── Set this manually in the dashboard (MongoDB Atlas connection string) ──
+      - key: MONGO_URI
+        sync: false
+      # Empty = in-memory mode (fine for a single free instance). Set a Redis
+      # URL (e.g. Upstash) later if you scale to multiple instances.
+      - key: REDIS_URL
+        value: ""
+      # Mobile app sends no Origin header, so "*" is fine. If you deploy the web
+      # frontend, set this to its exact URL instead.
+      - key: CORS_ORIGIN
+        value: "*"
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: COOKIE_DOMAIN
+        value: ""
+      - key: STORAGE_DRIVER
+        value: local
+      - key: MAX_UPLOAD_MB
+        value: "25"
+      - key: OTP_TTL_SECONDS
+        value: "300"
+      - key: OTP_LENGTH
+        value: "6"
+      - key: RATE_LIMIT_WINDOW_MS
+        value: "60000"
+      - key: RATE_LIMIT_MAX
+        value: "120"
+      # ── Optional: SMTP for real verification/reset emails. Leave blank and OTP
+      #    codes are written to the server logs (visible in Render → Logs). ──
+      - key: SMTP_HOST
+        value: ""
+      - key: SMTP_PORT
+        value: "587"
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SMTP_FROM
+        value: "Pulse Chat <no-reply@pulse.app>"
