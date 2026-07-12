@@ -18,6 +18,10 @@ export interface IUser {
   isEmailVerified: boolean;
   isOnline: boolean;
   lastSeen: Date;
+  /** The relationship this user belongs to (set on signup, partner joins later). */
+  couple?: Types.ObjectId;
+  /** What THIS user calls their partner (private to this user). Emojis/Unicode ok. */
+  partnerNickname?: string;
   privacy: IUserPrivacy;
   blockedUsers: Types.ObjectId[];
   mutedUsers: Types.ObjectId[];
@@ -54,6 +58,8 @@ const userSchema = new Schema<IUser>(
     isEmailVerified: { type: Boolean, default: false },
     isOnline: { type: Boolean, default: false },
     lastSeen: { type: Date, default: () => new Date() },
+    couple: { type: Schema.Types.ObjectId, ref: 'Couple', index: true },
+    partnerNickname: { type: String, trim: true, maxlength: 30 },
     privacy: {
       lastSeen: { type: String, enum: Object.values(PrivacyLevel), default: PrivacyLevel.Everyone },
       profilePhoto: {

@@ -1,14 +1,18 @@
+import { FloatingHearts } from '@/components/love/FloatingHearts';
+
 export function EmptyChat() {
   return (
-    <div className="flex h-full flex-col items-center justify-center bg-surface-muted text-center dark:bg-surface-dark">
-      <div className="mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-brand-500/10 text-5xl">
-        💬
+    <div className="relative flex h-full flex-col items-center justify-center overflow-hidden love-bg text-center">
+      <FloatingHearts count={12} />
+      <div className="relative z-10 flex flex-col items-center px-6">
+        <div className="mb-5 grid h-24 w-24 place-items-center rounded-[2rem] love-gradient animate-shimmer text-5xl shadow-glow">
+          <span className="animate-heartbeat">💖</span>
+        </div>
+        <h2 className="font-script text-4xl love-text">Only for My Princess</h2>
+        <p className="mt-3 max-w-sm text-sm text-slate-500 dark:text-slate-300">
+          Pick a conversation and say something sweet — every message here is written with love. 💌
+        </p>
       </div>
-      <h2 className="text-xl font-semibold text-slate-700 dark:text-slate-200">Pulse for Web</h2>
-      <p className="mt-2 max-w-sm text-sm text-slate-500 dark:text-slate-400">
-        Select a conversation or start a new one to begin messaging. Your chats sync in real time
-        across all your devices.
-      </p>
     </div>
   );
 }

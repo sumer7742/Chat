@@ -17,7 +17,7 @@ export function useAuth() {
   );
 
   const register = useCallback(
-    async (input: { email: string; username: string; displayName: string; password: string }) => {
+    async (input: { email: string; username: string; displayName: string; password: string; avatarUrl?: string }) => {
       const { user, accessToken } = await authService.register(input);
       setAuth(user, accessToken);
       return user;

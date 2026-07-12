@@ -30,6 +30,7 @@ export const SocketEvent = {
   // chat / user updates
   ChatUpdated: 'chat-updated',
   UserUpdated: 'user-updated',
+  CoupleUpdated: 'couple-updated',
   Notification: 'notification',
 
   // calls (WebRTC signaling)

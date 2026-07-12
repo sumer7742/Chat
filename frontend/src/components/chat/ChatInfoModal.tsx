@@ -5,6 +5,7 @@ import type { Chat, User } from '@/types';
 import { Modal } from '@/components/ui/Modal';
 import { Avatar } from '@/components/ui/Avatar';
 import { Button } from '@/components/ui/Button';
+import { MediaGallery } from './MediaGallery';
 import { chatDisplay, myMember } from '@/lib/chat';
 import { chatService } from '@/services/chat.service';
 import { userService } from '@/services/user.service';
@@ -26,6 +27,7 @@ export function ChatInfoModal({
   const display = chatDisplay(chat, me);
   const mine = myMember(chat, me);
   const [busy, setBusy] = useState(false);
+  const [galleryOpen, setGalleryOpen] = useState(false);
   const isOwnerOrMod = chat.owner === me?._id || chat.admins.includes(me?._id ?? '');
 
   const invalidate = () => {
@@ -91,6 +93,14 @@ export function ChatInfoModal({
         </div>
       )}
 
+      <button
+        onClick={() => setGalleryOpen(true)}
+        className="mb-3 flex w-full items-center justify-between rounded-xl bg-surface-muted px-4 py-3 text-sm text-slate-700 transition hover:bg-surface-hover dark:bg-surface-hover dark:text-slate-200 dark:hover:bg-surface-panel"
+      >
+        <span className="font-medium">🖼️ Shared media</span>
+        <span className="text-slate-400">Photos & videos ›</span>
+      </button>
+
       <div className="grid grid-cols-2 gap-2">
         <Button variant="secondary" size="sm" onClick={toggleMute} disabled={busy}>
           {mine?.muted ? 'Unmute' : 'Mute'}
@@ -117,6 +127,8 @@ export function ChatInfoModal({
           </Button>
         )}
       </div>
+
+      <MediaGallery open={galleryOpen} onClose={() => setGalleryOpen(false)} chat={chat} me={me} />
     </Modal>
   );
 }

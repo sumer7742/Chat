@@ -27,6 +27,11 @@ export const listMessages = catchAsync(async (req: Request, res: Response) => {
   return ok(res, { messages: messages.map((m) => m.toJSON()), hasMore: messages.length === limit });
 });
 
+export const listMedia = catchAsync(async (req: Request, res: Response) => {
+  const messages = await messageService.listMedia(req.params.id!, uid(req));
+  return ok(res, { messages: messages.map((m) => m.toJSON()) });
+});
+
 export const editMessage = catchAsync(async (req: Request, res: Response) => {
   const msg = await messageService.edit(req.params.id!, uid(req), req.body.text);
   return ok(res, { message: msg.toJSON() });

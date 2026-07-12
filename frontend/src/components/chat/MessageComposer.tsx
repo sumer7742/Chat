@@ -116,16 +116,16 @@ export function MessageComposer({ chatId }: { chatId: string }) {
   };
 
   return (
-    <div className="border-t border-slate-200 bg-white px-3 py-2 dark:border-surface-hover dark:bg-surface-panel">
+    <div className="border-t border-princess-pink/15 bg-white/55 px-3 py-2 backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04]">
       {replyTo && (
-        <div className="mb-2 flex items-center gap-2 rounded-lg border-l-4 border-brand-500 bg-surface-muted px-3 py-1.5 dark:bg-surface-hover">
+        <div className="mb-2 flex items-center gap-2 rounded-xl border-l-4 border-princess-pink bg-princess-pink/10 px-3 py-1.5">
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-medium text-brand-600 dark:text-brand-300">
+            <p className="text-xs font-medium text-princess-pink">
               Replying to {replyTo.sender.displayName}
             </p>
             <p className="truncate text-xs text-slate-500">{replyTo.text ?? 'Attachment'}</p>
           </div>
-          <button onClick={() => setReplyTo(null)} className="text-slate-400 hover:text-slate-600">
+          <button onClick={() => setReplyTo(null)} className="text-slate-400 hover:text-princess-pink">
             <CloseIcon className="h-4 w-4" />
           </button>
         </div>
@@ -134,7 +134,7 @@ export function MessageComposer({ chatId }: { chatId: string }) {
       <div className="relative flex items-end gap-2">
         <button
           onClick={() => setShowEmoji((v) => !v)}
-          className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover"
+          className="rounded-full p-2 text-princess-purple hover:bg-princess-pink/10 dark:text-princess-rose"
         >
           <SmileIcon />
         </button>
@@ -153,7 +153,7 @@ export function MessageComposer({ chatId }: { chatId: string }) {
 
         <button
           onClick={() => fileInput.current?.click()}
-          className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover"
+          className="rounded-full p-2 text-princess-purple hover:bg-princess-pink/10 dark:text-princess-rose"
           disabled={uploading}
         >
           {uploading ? <Spinner size={18} /> : <PaperclipIcon />}
@@ -169,15 +169,15 @@ export function MessageComposer({ chatId }: { chatId: string }) {
           }}
           onKeyDown={onKeyDown}
           onBlur={stopTyping}
-          placeholder="Type a message"
+          placeholder="Type something sweet…"
           rows={1}
-          className="scrollbar-thin max-h-32 flex-1 resize-none rounded-2xl bg-surface-muted px-4 py-2.5 text-sm text-slate-900 outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-surface-hover dark:text-slate-100"
+          className="scrollbar-thin max-h-32 flex-1 resize-none rounded-2xl border border-princess-pink/20 bg-white/70 px-4 py-2.5 text-sm text-slate-900 outline-none transition focus:ring-2 focus:ring-princess-pink/40 dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
         />
 
         <button
           onClick={submit}
           disabled={!text.trim() || sending}
-          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-500 text-white transition hover:bg-brand-600 disabled:opacity-50"
+          className="heart-btn flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white transition disabled:opacity-40"
         >
           {sending ? <Spinner size={18} className="text-white" /> : <SendIcon />}
         </button>

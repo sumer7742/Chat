@@ -7,8 +7,9 @@ import { Avatar } from '@/components/ui/Avatar';
 import { Spinner } from '@/components/ui/Spinner';
 import { ChatListItem } from './ChatListItem';
 import { NewChatModal } from './NewChatModal';
+import { ThemePicker } from '@/components/ThemePicker';
 import { chatDisplay } from '@/lib/chat';
-import { MoonIcon, SunIcon, PlusIcon, SearchIcon, SettingsIcon, LogoutIcon } from '@/components/ui/icons';
+import { MoonIcon, SunIcon, PlusIcon, SearchIcon, SettingsIcon, LogoutIcon, PaletteIcon } from '@/components/ui/icons';
 
 export function Sidebar({
   activeChatId,
@@ -23,6 +24,7 @@ export function Sidebar({
   const { data, isLoading } = useChats();
   const [search, setSearch] = useState('');
   const [showNew, setShowNew] = useState(false);
+  const [showThemes, setShowThemes] = useState(false);
   const [archived, setArchived] = useState(false);
 
   const chats = useMemo(() => {
@@ -43,6 +45,9 @@ export function Sidebar({
 
   return (
     <div className="flex h-full flex-col">
+      <div className="love-gradient animate-shimmer px-4 py-2 text-center text-sm font-semibold text-white">
+        Only for My Princess ❤️
+      </div>
       <header className="flex items-center gap-2 border-b border-slate-100 px-4 py-3 dark:border-surface-hover">
         <button onClick={() => navigate('/settings')} className="shrink-0">
           <Avatar name={user?.displayName ?? '?'} src={user?.avatarUrl} id={user?._id} size={40} />
@@ -52,6 +57,20 @@ export function Sidebar({
           <p className="truncate text-xs text-slate-400">@{user?.username}</p>
         </div>
         <button
+          onClick={() => navigate('/love')}
+          className="animate-heartbeat rounded-full p-2 text-princess-pink hover:bg-princess-pink/10"
+          title="Our Love space"
+        >
+          <span className="text-lg leading-none">💞</span>
+        </button>
+        <button
+          onClick={() => setShowThemes(true)}
+          className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-surface-hover"
+          title="Themes"
+        >
+          <PaletteIcon />
+        </button>
+        <button
           onClick={toggleTheme}
           className="rounded-full p-2 text-slate-500 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-surface-hover"
           title="Toggle theme"
@@ -60,7 +79,7 @@ export function Sidebar({
         </button>
         <button
           onClick={() => setShowNew(true)}
-          className="rounded-full bg-brand-500 p-2 text-white hover:bg-brand-600"
+          className="rounded-full bg-gradient-primary p-2 text-white shadow-glow transition hover:brightness-110 active:scale-95"
           title="New chat"
         >
           <PlusIcon />
@@ -73,20 +92,20 @@ export function Sidebar({
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search chats"
-            className="w-full rounded-lg bg-surface-muted py-2 pl-9 pr-3 text-sm outline-none focus:ring-2 focus:ring-brand-500/20 dark:bg-surface-panel dark:text-slate-100"
+            placeholder="Search our chats 💕"
+            className="w-full rounded-2xl border border-princess-pink/20 bg-white/60 py-2 pl-9 pr-3 text-sm outline-none backdrop-blur-md transition focus:ring-2 focus:ring-princess-pink/40 dark:border-white/10 dark:bg-white/10 dark:text-slate-100"
           />
         </div>
         <div className="mt-2 flex gap-1 text-xs">
           <button
             onClick={() => setArchived(false)}
-            className={`rounded-full px-3 py-1 ${!archived ? 'bg-brand-500 text-white' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover'}`}
+            className={`rounded-full px-3 py-1 transition ${!archived ? 'bg-gradient-primary text-white shadow-glow' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover'}`}
           >
             Chats
           </button>
           <button
             onClick={() => setArchived(true)}
-            className={`rounded-full px-3 py-1 ${archived ? 'bg-brand-500 text-white' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover'}`}
+            className={`rounded-full px-3 py-1 transition ${archived ? 'bg-gradient-primary text-white shadow-glow' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-surface-hover'}`}
           >
             Archived
           </button>
@@ -125,6 +144,7 @@ export function Sidebar({
       </footer>
 
       <NewChatModal open={showNew} onClose={() => setShowNew(false)} onCreated={onOpenChat} />
+      <ThemePicker open={showThemes} onClose={() => setShowThemes(false)} />
     </div>
   );
 }

@@ -42,6 +42,9 @@ export const realtime = {
   userUpdated(userId: string, patch: unknown): void {
     emitToUser(userId, SocketEvent.UserUpdated, patch);
   },
+  coupleUpdated(userId: string, patch: unknown): void {
+    emitToUser(userId, SocketEvent.CoupleUpdated, patch);
+  },
   toChat: emitToChat,
   toUser: emitToUser,
 };

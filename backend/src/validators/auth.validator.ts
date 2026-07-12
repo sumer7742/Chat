@@ -18,6 +18,7 @@ export const registerSchema = z.object({
       .regex(/^[a-zA-Z0-9_.]+$/, 'Only letters, numbers, "_" and "." allowed'),
     displayName: z.string().min(1).max(64),
     password,
+    avatarUrl: z.string().max(512).optional(),
   }),
 });
 

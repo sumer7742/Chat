@@ -42,6 +42,7 @@ router.post('/:id/leave', validate({ params: idParam }), chat.leaveChat);
 
 // Messages (nested under a chat)
 router.get('/:id/messages', validate(listMessagesSchema), message.listMessages);
+router.get('/:id/messages/media', validate({ params: idParam }), message.listMedia);
 router.post('/:id/messages', validate(sendMessageSchema), message.sendMessage);
 router.post('/:id/messages/seen', validate(seenSchema), message.markSeen);
 router.get('/:id/messages/search', validate(searchMessagesSchema), message.searchMessages);

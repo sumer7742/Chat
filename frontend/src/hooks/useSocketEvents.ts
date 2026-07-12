@@ -97,6 +97,8 @@ export function useSocketEvents() {
       presence.setTyping(chatId, id, '', false);
     const onActivity = ({ chatId, userId: id, kind }: { chatId: string; userId: string; kind: string }) =>
       presence.setActivity(chatId, id, kind);
+    // Partner-nickname changed on another device for this same user → resync.
+    const onCoupleUpdated = () => queryClient.invalidateQueries({ queryKey: ['couple'] });
 
     socket.on('receive-message', onReceive);
     socket.on('message-edited', onEdited);
@@ -109,6 +111,7 @@ export function useSocketEvents() {
     socket.on('typing', onTyping);
     socket.on('stop-typing', onStopTyping);
     socket.on('activity', onActivity);
+    socket.on('couple-updated', onCoupleUpdated);
 
     return () => {
       socket.off('receive-message', onReceive);
@@ -122,6 +125,7 @@ export function useSocketEvents() {
       socket.off('typing', onTyping);
       socket.off('stop-typing', onStopTyping);
       socket.off('activity', onActivity);
+      socket.off('couple-updated', onCoupleUpdated);
     };
   }, [userId]);
 

@@ -113,6 +113,11 @@ class MessageService {
     return messageRepository.listByChat(chatId, userId, { limit, before });
   }
 
+  async listMedia(chatId: string, userId: string) {
+    await this.assertMember(chatId, userId);
+    return messageRepository.listMedia(chatId, userId);
+  }
+
   async edit(messageId: string, userId: string, text: string): Promise<MessageDocument> {
     const msg = await Message.findById(messageId);
     if (!msg) throw ApiError.notFound('Message not found');

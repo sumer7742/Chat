@@ -12,9 +12,9 @@ const QUICK_REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏'];
 function StatusTicks({ message, totalMembers }: { message: Message; totalMembers: number }) {
   const seen = message.seenBy.length >= Math.max(1, totalMembers - 1) && totalMembers <= 2 ? true : message.seenBy.length > 0;
   const delivered = message.deliveredTo.length > 0 || message.status === 'delivered';
-  if (message.status === 'seen' || seen) return <ChecksIcon className="h-4 w-4 text-sky-400" />;
-  if (message.status === 'delivered' || delivered) return <ChecksIcon className="h-4 w-4 text-slate-400" />;
-  return <CheckIcon className="h-3.5 w-3.5 text-slate-400" />;
+  if (message.status === 'seen' || seen) return <ChecksIcon className="h-4 w-4 text-white" />;
+  if (message.status === 'delivered' || delivered) return <ChecksIcon className="h-4 w-4 text-white/60" />;
+  return <CheckIcon className="h-3.5 w-3.5 text-white/60" />;
 }
 
 function Attachments({ message }: { message: Message }) {
@@ -125,10 +125,10 @@ export function MessageBubble({
       <div className={cn('relative max-w-[75%]', mine && 'items-end')}>
         <div
           className={cn(
-            'relative rounded-2xl px-3 py-2 shadow-sm',
+            'relative rounded-3xl px-3.5 py-2 shadow-sm',
             mine
-              ? 'rounded-br-md bg-brand-100 text-slate-900 dark:bg-brand-700 dark:text-white'
-              : 'rounded-bl-md bg-white text-slate-900 dark:bg-surface-panel dark:text-slate-100',
+              ? 'rounded-br-lg bg-gradient-primary text-white shadow-glow'
+              : 'rounded-bl-lg border border-white/50 bg-white/75 text-slate-800 backdrop-blur-md dark:border-white/10 dark:bg-white/10 dark:text-slate-100',
           )}
         >
           {isGroup && !mine && !grouped && (
@@ -138,32 +138,41 @@ export function MessageBubble({
           )}
 
           {message.replyTo && (
-            <div className="mb-1 border-l-2 border-brand-500 bg-black/5 px-2 py-1 text-xs dark:bg-white/10">
-              <p className="font-medium text-brand-600 dark:text-brand-300">
+            <div
+              className={cn(
+                'mb-1 border-l-2 px-2 py-1 text-xs',
+                mine ? 'border-white/70 bg-white/15' : 'border-accent-500 bg-black/5 dark:bg-white/10',
+              )}
+            >
+              <p className={cn('font-medium', mine ? 'text-white' : 'text-accent-600 dark:text-accent-400')}>
                 {message.replyTo.sender?.displayName ?? 'Reply'}
               </p>
-              <p className="truncate text-slate-500 dark:text-slate-400">{message.replyTo.text ?? 'Attachment'}</p>
+              <p className={cn('truncate', mine ? 'text-white/80' : 'text-slate-500 dark:text-slate-400')}>
+                {message.replyTo.text ?? 'Attachment'}
+              </p>
             </div>
           )}
 
-          {message.forwardedFrom && <p className="mb-0.5 text-xs italic text-slate-400">↪ forwarded</p>}
+          {message.forwardedFrom && (
+            <p className={cn('mb-0.5 text-xs italic', mine ? 'text-white/70' : 'text-slate-400')}>↪ forwarded</p>
+          )}
 
           {message.attachments.length > 0 && <Attachments message={message} />}
 
           {message.isDeleted ? (
-            <p className="italic text-slate-400">🚫 This message was deleted</p>
+            <p className={cn('italic', mine ? 'text-white/70' : 'text-slate-400')}>🚫 This message was deleted</p>
           ) : editing ? (
             <div className="flex flex-col gap-1">
               <textarea
                 value={editText}
                 onChange={(e) => setEditText(e.target.value)}
-                className="w-64 resize-none rounded bg-white/70 p-1 text-sm text-slate-900 outline-none dark:bg-black/30 dark:text-white"
+                className="w-64 resize-none rounded bg-white/90 p-1 text-sm text-slate-900 outline-none"
                 rows={2}
                 autoFocus
               />
               <div className="flex justify-end gap-2 text-xs">
-                <button onClick={() => setEditing(false)} className="text-slate-500">Cancel</button>
-                <button onClick={saveEdit} className="font-semibold text-brand-600">Save</button>
+                <button onClick={() => setEditing(false)} className={mine ? 'text-white/80' : 'text-slate-500'}>Cancel</button>
+                <button onClick={saveEdit} className={cn('font-semibold', mine ? 'text-white' : 'text-accent-600')}>Save</button>
               </div>
             </div>
           ) : (
@@ -178,7 +187,7 @@ export function MessageBubble({
             )
           )}
 
-          <div className={cn('mt-0.5 flex items-center justify-end gap-1 text-[10px] text-slate-400')}>
+          <div className={cn('mt-0.5 flex items-center justify-end gap-1 text-[10px]', mine ? 'text-white/70' : 'text-slate-400')}>
             {message.isEdited && !message.isDeleted && <span>edited</span>}
             <span>{formatMessageTime(message.createdAt)}</span>
             {mine && !message.isDeleted && <StatusTicks message={message} totalMembers={totalMembers} />}

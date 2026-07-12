@@ -88,3 +88,6 @@ export const LogoutIcon = (p: P) => (
 export const FileIcon = (p: P) => (
   <svg {...base(p)}><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" /><path d="M14 2v6h6" /></svg>
 );
+export const PaletteIcon = (p: P) => (
+  <svg {...base(p)}><circle cx="13.5" cy="6.5" r="1" /><circle cx="17.5" cy="10.5" r="1" /><circle cx="8.5" cy="7.5" r="1" /><circle cx="6.5" cy="12.5" r="1" /><path d="M12 2a10 10 0 0 0 0 20 2.5 2.5 0 0 0 2-4 2.5 2.5 0 0 1 2-4h1.5a4.5 4.5 0 0 0 4.5-4.5A10 10 0 0 0 12 2Z" /></svg>
+);

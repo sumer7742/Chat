@@ -7,6 +7,7 @@ import { ApiError } from '../utils/ApiError';
 import { emailService } from './email.service';
 import { cacheService } from './cache.service';
 import { tokenService, type DeviceContext, type TokenPair } from './token.service';
+import { coupleService } from './couple.service';
 import type { UserDocument } from '../models/User';
 
 export interface RegisterInput {
@@ -14,6 +15,7 @@ export interface RegisterInput {
   username: string;
   password: string;
   displayName: string;
+  avatarUrl?: string;
 }
 
 export interface AuthResult extends TokenPair {
@@ -32,10 +34,15 @@ class AuthService {
       email: input.email,
       username: input.username,
       displayName: input.displayName,
+      avatarUrl: input.avatarUrl,
       password: await hashPassword(input.password),
+      // No OTP step on signup — accounts are active immediately.
+      isEmailVerified: true,
     });
 
-    await this.issueOtp(user.email);
+    // Every new user starts a relationship of their own; a partner joins later.
+    await coupleService.createForUser(user._id.toString());
+
     const tokens = await tokenService.issueSession(user._id.toString(), device);
     return { ...tokens, user };
   }

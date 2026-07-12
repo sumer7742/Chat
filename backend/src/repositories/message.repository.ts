@@ -43,6 +43,20 @@ class MessageRepository extends BaseRepository<IMessage> {
       .exec();
   }
 
+  /** Shared image/video attachments in a chat (newest-first), for the media gallery. */
+  listMedia(chatId: string, userId: string, limit = 120): Promise<MessageDocument[]> {
+    return Message.find({
+      chat: new Types.ObjectId(chatId),
+      isDeleted: false,
+      deletedFor: { $ne: new Types.ObjectId(userId) },
+      'attachments.mimeType': { $regex: '^(image|video)/' },
+    })
+      .sort({ _id: -1 })
+      .limit(limit)
+      .populate('sender', 'username displayName avatarUrl')
+      .exec();
+  }
+
   listStarred(userId: string, limit = 50): Promise<MessageDocument[]> {
     return Message.find({ starredBy: new Types.ObjectId(userId) })
       .sort({ _id: -1 })

@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
 import authRoutes from './auth.routes';
+import coupleRoutes from './couple.routes';
 import userRoutes from './user.routes';
 import chatRoutes from './chat.routes';
 import messageRoutes from './message.routes';
@@ -23,6 +24,7 @@ router.get('/health', (_req, res) => {
 });
 
 router.use('/auth', authRoutes);
+router.use('/couple', coupleRoutes);
 router.use('/users', userRoutes);
 router.use('/chats', chatRoutes);
 router.use('/messages', messageRoutes);

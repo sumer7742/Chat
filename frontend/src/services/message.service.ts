@@ -47,6 +47,10 @@ export const messageService = {
     const { data } = await api.get<{ data: { messages: Message[] } }>('/messages/starred');
     return data.data.messages;
   },
+  async listMedia(chatId: string) {
+    const { data } = await api.get<{ data: { messages: Message[] } }>(`/chats/${chatId}/messages/media`);
+    return data.data.messages;
+  },
   async forward(messageId: string, chatIds: string[]) {
     const { data } = await api.post<{ data: { messages: Message[] } }>(`/messages/${messageId}/forward`, { chatIds });
     return data.data.messages;

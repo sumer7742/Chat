@@ -19,8 +19,9 @@ export default function VerifyOtpPage() {
     setLoading(true);
     try {
       await authService.verifyOtp(email.trim().toLowerCase(), otp.trim());
-      toast.success('Email verified!');
-      navigate('/');
+      toast.success('Email verified! 💌');
+      // New users land on the couple screen to share/enter their invite code.
+      navigate('/couple');
     } catch (err) {
       toast.error(apiErrorMessage(err));
     } finally {
