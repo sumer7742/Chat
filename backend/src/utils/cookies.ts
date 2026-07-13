@@ -5,10 +5,14 @@ const REFRESH_COOKIE = 'refreshToken';
 const ACCESS_COOKIE = 'accessToken';
 
 function baseOptions(): CookieOptions {
+  const secure = env.COOKIE_SECURE || isProd;
   return {
     httpOnly: true,
-    secure: env.COOKIE_SECURE || isProd,
-    sameSite: 'lax',
+    secure,
+    // Cross-site (web/mobile on a different origin than the API) needs
+    // SameSite=None, which browsers only accept alongside Secure. Locally
+    // (http) fall back to Lax.
+    sameSite: secure ? 'none' : 'lax',
     domain: env.COOKIE_DOMAIN || undefined,
     path: '/',
   };

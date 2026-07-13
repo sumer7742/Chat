@@ -24,7 +24,10 @@ export function createApp(): Application {
   );
   app.use(
     cors({
-      origin: corsOrigins,
+      // With credentials, ACAO cannot be a literal "*" — it must echo the
+      // request origin. When CORS_ORIGIN is "*", reflect any origin (fine for a
+      // private app); otherwise restrict to the explicit allow-list.
+      origin: corsOrigins.includes('*') ? true : corsOrigins,
       credentials: true,
       methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     }),
