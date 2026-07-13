@@ -19,7 +19,6 @@ export function MessageComposer({ chatId }: { chatId: string }) {
   const { theme } = useUIStore();
   const { replyTo, setReplyTo } = useComposerStore();
   const [text, setText] = useState('');
-  const [sending, setSending] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [showEmoji, setShowEmoji] = useState(false);
   const typingTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -60,19 +59,20 @@ export function MessageComposer({ chatId }: { chatId: string }) {
 
   const submit = async () => {
     const value = text.trim();
-    if (!value || sending) return;
-    setSending(true);
+    if (!value) return;
+    const replyId = replyTo?._id;
+    // Clear the input instantly — the message renders via the optimistic cache,
+    // so the composer never waits on the network round-trip.
+    setText('');
+    setReplyTo(null);
+    localStorage.removeItem(DRAFT_KEY(chatId));
+    chatService.setFlags(chatId, { draft: '' }).catch(() => {});
     stopTyping();
     try {
-      await send({ type: 'text', text: value, replyTo: replyTo?._id });
-      setText('');
-      setReplyTo(null);
-      localStorage.removeItem(DRAFT_KEY(chatId));
-      chatService.setFlags(chatId, { draft: '' }).catch(() => {});
+      await send({ type: 'text', text: value, replyTo: replyId });
     } catch (e) {
       toast.error(apiErrorMessage(e));
-    } finally {
-      setSending(false);
+      setText(value); // restore so the user can retry
     }
   };
 
@@ -176,10 +176,10 @@ export function MessageComposer({ chatId }: { chatId: string }) {
 
         <button
           onClick={submit}
-          disabled={!text.trim() || sending}
+          disabled={!text.trim()}
           className="heart-btn flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-white transition disabled:opacity-40"
         >
-          {sending ? <Spinner size={18} className="text-white" /> : <SendIcon />}
+          <SendIcon />
         </button>
       </div>
     </div>

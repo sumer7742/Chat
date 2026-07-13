@@ -19,7 +19,10 @@ export function getIo(): Server | null {
 
 export function initSocket(httpServer: HttpServer): Server {
   io = new Server(httpServer, {
-    cors: { origin: corsOrigins, credentials: true },
+    // Same reflect-origin rule as the HTTP CORS: with credentials, "*" is
+    // invalid, so echo the request origin. Otherwise the WS handshake fails
+    // cross-origin and realtime silently degrades to slow polling/refetch.
+    cors: { origin: corsOrigins.includes('*') ? true : corsOrigins, credentials: true },
     transports: ['websocket', 'polling'],
     maxHttpBufferSize: 5 * 1024 * 1024,
     pingTimeout: 30_000,

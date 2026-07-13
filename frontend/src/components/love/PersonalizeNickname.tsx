@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { coupleService, type CoupleView } from '@/services/couple.service';
 import { useCouple } from '@/hooks/useCouple';
+import { useAuthStore } from '@/store/authStore';
+import { queryKeys } from '@/lib/queryClient';
 import { NicknamePicker } from './NicknamePicker';
 import { FloatingHearts } from './FloatingHearts';
 import { apiErrorMessage } from '@/lib/api';
@@ -13,12 +15,13 @@ import { apiErrorMessage } from '@/lib/api';
  */
 export function PersonalizeNickname() {
   const qc = useQueryClient();
+  const userId = useAuthStore((s) => s.user?._id);
   const { data: couple } = useCouple();
 
   const save = useMutation({
     mutationFn: (nickname: string) => coupleService.setNickname(nickname),
     onSuccess: (c) => {
-      qc.setQueryData<CoupleView>(['couple'], c);
+      if (userId) qc.setQueryData<CoupleView>(queryKeys.couple(userId), c);
       toast.success(`You'll call them ${c.partnerNickname} 💕`);
     },
     onError: (e) => toast.error(apiErrorMessage(e)),

@@ -190,7 +190,11 @@ export function MessageBubble({
           <div className={cn('mt-0.5 flex items-center justify-end gap-1 text-[10px]', mine ? 'text-white/70' : 'text-slate-400')}>
             {message.isEdited && !message.isDeleted && <span>edited</span>}
             <span>{formatMessageTime(message.createdAt)}</span>
-            {mine && !message.isDeleted && <StatusTicks message={message} totalMembers={totalMembers} />}
+            {mine && message.pending ? (
+              <span className="opacity-70">🕐</span>
+            ) : (
+              mine && !message.isDeleted && <StatusTicks message={message} totalMembers={totalMembers} />
+            )}
           </div>
 
           {Object.keys(reactionCounts).length > 0 && (

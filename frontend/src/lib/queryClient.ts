@@ -15,6 +15,7 @@ export const queryKeys = {
   chat: (id: string) => ['chat', id] as const,
   messages: (chatId: string) => ['messages', chatId] as const,
   media: (chatId: string) => ['media', chatId] as const,
+  couple: (userId: string) => ['couple', userId] as const,
   notifications: ['notifications'] as const,
   sessions: ['sessions'] as const,
   starred: ['starred'] as const,

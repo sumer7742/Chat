@@ -10,6 +10,7 @@ import { useLoveStore } from '@/store/loveStore';
 import { useAuth } from '@/hooks/useAuth';
 import { useCouple } from '@/hooks/useCouple';
 import { coupleService, type CoupleView } from '@/services/couple.service';
+import { queryKeys } from '@/lib/queryClient';
 import { THEMES, CHAT_BGS, themeGradientCss } from '@/lib/themes';
 import { FONTS } from '@/lib/love';
 import { apiErrorMessage } from '@/lib/api';
@@ -27,7 +28,7 @@ function Card({ title, children }: { title: string; children: React.ReactNode })
 export default function LoveSettingsPage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { themeId, setThemeId, chatBgId, setChatBgId, theme, toggleTheme } = useUIStore();
   const { settings, setSettings } = useLoveStore();
   const { data: couple } = useCouple();
@@ -37,7 +38,7 @@ export default function LoveSettingsPage() {
   const saveNick = useMutation({
     mutationFn: (nickname: string) => coupleService.setNickname(nickname),
     onSuccess: (c) => {
-      qc.setQueryData<CoupleView>(['couple'], c);
+      if (user?._id) qc.setQueryData<CoupleView>(queryKeys.couple(user._id), c);
       setEditingNick(false);
       toast.success('Nickname updated 💕');
     },

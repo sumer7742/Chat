@@ -8,13 +8,6 @@ import { useLoveStore } from '@/store/loveStore';
 import { useNow } from '@/hooks/useNow';
 import { daysSince } from '@/lib/love';
 
-function greeting(h: number): string {
-  if (h < 12) return 'Good Morning';
-  if (h < 17) return 'Good Afternoon';
-  if (h < 21) return 'Good Evening';
-  return 'Good Night';
-}
-
 const TILES = [
   { to: '/love/dashboard', emoji: '💞', title: 'Love Dashboard', desc: 'Our story in numbers' },
   { to: '/love/memories', emoji: '📸', title: 'Memories', desc: 'Moments we treasure' },
@@ -36,7 +29,7 @@ export default function LoveHomePage() {
   const days = daysSince(config.firstMeet, now);
 
   return (
-    <LoveLayout title={`${greeting(now.getHours())}, ${nickname}`} subtitle="Our little world, made with love">
+    <LoveLayout title="Our Love Story ❤️" subtitle="Every memory begins with you.">
       <Onboarding />
       {/* Hero card */}
       <div className="glass-card relative mb-4 overflow-hidden p-6 text-center">

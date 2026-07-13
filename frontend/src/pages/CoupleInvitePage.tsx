@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { coupleService } from '@/services/couple.service';
+import { useCouple } from '@/hooks/useCouple';
+import { useAuthStore } from '@/store/authStore';
 import { useLoveStore } from '@/store/loveStore';
+import { queryKeys } from '@/lib/queryClient';
 import { Avatar } from '@/components/ui/Avatar';
 import { Spinner } from '@/components/ui/Spinner';
 import { FloatingHearts } from '@/components/love/FloatingHearts';
@@ -13,18 +16,16 @@ export default function CoupleInvitePage() {
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [params] = useSearchParams();
+  const userId = useAuthStore((s) => s.user?._id);
   const setSettings = useLoveStore((s) => s.setSettings);
   const [code, setCode] = useState('');
 
-  const { data: couple, isLoading } = useQuery({
-    queryKey: ['couple'],
-    queryFn: coupleService.get,
-  });
+  const { data: couple, isLoading } = useCouple();
 
   const join = useMutation({
     mutationFn: (inviteCode: string) => coupleService.join(inviteCode),
     onSuccess: (c) => {
-      qc.setQueryData(['couple'], c);
+      if (userId) qc.setQueryData(queryKeys.couple(userId), c);
       if (c.chatId) setSettings({ partnerChatId: c.chatId });
       sessionStorage.removeItem('pendingInvite');
       toast.success('Two hearts, linked forever 💞');

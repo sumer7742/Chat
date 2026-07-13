@@ -18,18 +18,20 @@ export function LoveLayout({ title, subtitle, children }: { title: string; subti
     <div className="relative flex h-full flex-col overflow-hidden love-bg font-sans">
       <FloatingHearts />
 
-      {/* Header */}
-      <header className="relative z-10 flex items-center gap-3 px-5 pb-2 pt-5">
+      {/* Header / hero greeting */}
+      <header className="relative z-10 flex items-center gap-3 px-5 pb-4 pt-6">
         <button
           onClick={() => navigate('/')}
-          className="glass-card flex h-10 w-10 items-center justify-center rounded-full text-lg"
+          className="glass-card flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-lg"
           aria-label="Back to chat"
         >
           ←
         </button>
-        <div className="min-w-0">
-          <h1 className="truncate text-2xl font-bold love-text">{title}</h1>
-          {subtitle && <p className="truncate text-xs text-princess-purple dark:text-princess-rose">{subtitle}</p>}
+        <div className="min-w-0 animate-fade-in">
+          <h1 className="truncate text-[26px] font-extrabold leading-tight tracking-tight love-text">{title}</h1>
+          {subtitle && (
+            <p className="truncate text-[13px] font-light text-slate-400 dark:text-princess-rose/70">{subtitle}</p>
+          )}
         </div>
       </header>
 
